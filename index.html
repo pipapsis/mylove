@@ -89,7 +89,7 @@
 
   /* ===== Открытка ===== */
   .card {
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(15px);
     border-radius: 30px;
     padding: 45px 40px 40px;
@@ -109,23 +109,30 @@
 
   h1 {
     font-size: 2.2em;
-    background: linear-gradient(45deg, #ff6b9d, #c44eff, #4ea8ff);
+    background: linear-gradient(45deg, #ff3d7f, #a020ff, #1e7dff);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #a020ff; /* fallback, если градиент не поддержан */
     margin-bottom: 15px;
     animation: glow 3s infinite alternate;
+    /* тень для читаемости на телефоне */
+    filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.8))
+            drop-shadow(0 0 12px rgba(196, 78, 255, 0.35));
+    line-height: 1.15;
   }
   @keyframes glow {
-    from { filter: drop-shadow(0 0 5px rgba(255,107,157,0.4)); }
-    to { filter: drop-shadow(0 0 20px rgba(196,78,255,0.6)); }
+    from { filter: drop-shadow(0 2px 6px rgba(255,255,255,0.8))
+                   drop-shadow(0 0 4px rgba(255,107,157,0.4)); }
+    to   { filter: drop-shadow(0 2px 6px rgba(255,255,255,0.8))
+                   drop-shadow(0 0 18px rgba(196,78,255,0.7)); }
   }
   .name {
     font-size: 1.9em;
     color: #ff4d8d;
     font-weight: bold;
     margin: 5px 0 15px;
-    text-shadow: 0 2px 10px rgba(255, 77, 141, 0.3);
+    text-shadow: 0 2px 10px rgba(255, 77, 141, 0.35);
     animation: pop 2s ease-in-out infinite alternate;
   }
   @keyframes pop {
@@ -186,6 +193,20 @@
     position: relative;
   }
 
+  /* Тарелка */
+  .plate {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 225px;
+    height: 14px;
+    background: linear-gradient(180deg, #fff 0%, #e0d0e8 100%);
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(142, 45, 226, 0.25);
+    z-index: 0;
+  }
+
   /* Нижний ярус */
   .cake-bottom {
     position: absolute;
@@ -236,7 +257,7 @@
     border-radius: 12px 12px 0 0;
   }
 
-  /* Свечки — стоят ровно на верхнем ярусе */
+  /* Свечки — ровно по центру верхнего яруса */
   .candle {
     position: absolute;
     width: 8px;
@@ -251,9 +272,10 @@
     box-shadow: 0 0 6px rgba(255, 107, 157, 0.5);
     z-index: 3;
   }
-  .candle:nth-child(1) { left: calc(50% - 35px); animation: candleIn 0.5s 0.3s backwards; }
-  .candle:nth-child(2) { left: calc(50% - 4px); animation: candleIn 0.5s 0.5s backwards; }
-  .candle:nth-child(3) { left: calc(50% + 27px); animation: candleIn 0.5s 0.7s backwards; }
+  /* Явные позиции — без nth-child */
+  .candle-1 { left: calc(50% - 35px); animation: candleIn 0.5s 0.3s backwards; }
+  .candle-2 { left: calc(50% - 4px);  animation: candleIn 0.5s 0.5s backwards; }
+  .candle-3 { left: calc(50% + 27px); animation: candleIn 0.5s 0.7s backwards; }
 
   @keyframes candleIn {
     from { transform: translateY(-30px); opacity: 0; }
@@ -288,27 +310,44 @@
     z-index: 4;
   }
 
-  /* Тарелка */
-  .plate {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 225px;
-    height: 14px;
-    background: linear-gradient(180deg, #fff 0%, #e0d0e8 100%);
-    border-radius: 50%;
-    box-shadow: 0 4px 15px rgba(142, 45, 226, 0.25);
-    z-index: 0;
+  /* ===== МОБИЛЬНАЯ ВЕРСИЯ ===== */
+  @media (max-width: 500px) {
+    body { padding: 12px; align-items: flex-start; padding-top: 60px; }
+
+    .card {
+      padding: 35px 20px 28px;
+      border-radius: 24px;
+    }
+
+    /* Заголовок — делаем крупнее, с более плотной тенью */
+    h1 {
+      font-size: 1.85em;
+      letter-spacing: 0.5px;
+      filter: drop-shadow(0 2px 4px rgba(255,255,255,1))
+              drop-shadow(0 2px 8px rgba(255,255,255,0.9))
+              drop-shadow(0 0 14px rgba(196,78,255,0.5));
+      line-height: 1.2;
+    }
+
+    .name { font-size: 1.45em; }
+
+    p { font-size: 0.98em; line-height: 1.7; }
+
+    .divider { font-size: 16px; letter-spacing: 5px; margin: 10px 0; }
+
+    /* Торт чуть меньше, но не съезжает */
+    .cake-container { transform: scale(0.88); margin: 15px auto 0; }
+
+    .music-btn { width: 48px; height: 48px; font-size: 20px; top: 14px; right: 14px; }
+
+    .btn { padding: 12px 26px; font-size: 0.95em; }
   }
 
-  @media (max-width: 500px) {
-    .card { padding: 40px 22px 30px; }
-    h1 { font-size: 1.7em; }
-    .name { font-size: 1.5em; }
-    p { font-size: 0.98em; }
-    .cake-container { transform: scale(0.9); }
-    .music-btn { width: 48px; height: 48px; font-size: 20px; }
+  /* Совсем маленькие экраны */
+  @media (max-width: 360px) {
+    h1 { font-size: 1.55em; }
+    .name { font-size: 1.25em; }
+    .cake-container { transform: scale(0.78); margin: 8px auto 0; }
   }
 </style>
 </head>
@@ -338,10 +377,10 @@
       <span class="berry" style="top:-14px; right:18px;">🍓</span>
     </div>
 
-    <!-- Свечки -->
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
+    <!-- Свечки с явными классами -->
+    <div class="candle candle-1"><div class="flame"></div></div>
+    <div class="candle candle-2"><div class="flame"></div></div>
+    <div class="candle candle-3"><div class="flame"></div></div>
   </div>
 
   <div class="divider">✦ ✿ ✦ ✿ ✦</div>
